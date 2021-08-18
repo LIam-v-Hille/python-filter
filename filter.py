@@ -1,4 +1,5 @@
 import re
+import json
 
 class Filter:		# Create a filter object
 
@@ -11,11 +12,11 @@ class Filter:		# Create a filter object
 		lphrases = list(phrases)
 		for phrase in phrases:
 			if phrase not in self.filters:
-				self.filters.append(phrase)
-				self.infringments[phrase] = 0
+				self.filters.append(phrase.lower())
+				self.infringments[phrase.lower()] = 0
 			else:
 				print(f"filter expression \"{phrase}\" already in list")
-				lphrases.remove(phrase)
+				lphrases.remove(phrase.lower())
 		return f"created a filter with phrase(s) {lphrases}"
 
 	def remove_filter_phrase(self,*phrases):
@@ -23,17 +24,20 @@ class Filter:		# Create a filter object
 		for phrase in phrases:
 			if phrase not in self.filters:
 				print(f"filter expression \"{phrase}\" not in list")
-				lphrases.remove(phrase)
+				lphrases.remove(phrase.lower())
 			else:
 				self.filters.remove(phrase)
 		return f"removed {lphrases} from filters"
 
-	def filter_file(self,file, text: bool = False, logToFile:bool = True, logFile:str = ""):
-		lines = open(file,"r").readlines()
+	def filter_file(self,file, text: bool = False, logToFile:bool = True, logFile:str = "", multiword:bool = False):
+		lines = open(file,"r", encoding='utf-8').readlines()
 		line_num = 1
 		for line in lines:
 			lower_line = line.lower()
-			lower_lines = re.split(" |\n", lower_line)
+			if multiword:
+				lower_lines = lower_line
+			else:
+				lower_lines = re.split("\s|\n", lower_line)
 			for i in range(len(self.filters)):
 				current_filter = self.filters[i]
 				if current_filter in lower_lines:
@@ -58,3 +62,5 @@ class Filter:		# Create a filter object
 
 	def get_inf(self):
 		return self.infringments
+
+		# credit to "Abdul-Razak Adam" on stackoverflow

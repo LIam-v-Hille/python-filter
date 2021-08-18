@@ -1,5 +1,0 @@
-flight 1
-baseball 1
-dad 2
-lady 2
-plane 1

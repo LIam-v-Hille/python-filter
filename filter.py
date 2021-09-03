@@ -62,5 +62,3 @@ class Filter:		# Create a filter object
 
 	def get_inf(self):
 		return self.infringments
-
-		# credit to "Abdul-Razak Adam" on stackoverflow
